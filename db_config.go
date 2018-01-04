@@ -11,6 +11,7 @@ const (
 	DB_NAME_KEY = "NAME"
 
 	DEFAULT_POSTGRES_PORT = "5432"
+	POSTGRES_PROTOCOL     = "tcp"
 )
 
 // DBConfig Interface for database configuration and connection
@@ -29,6 +30,7 @@ type PGConfig struct {
 // NewPGConfig
 func NewPGConfig(name string) PGConfig {
 	host := NewServerAddr(name)
+	host.Protocol = POSTGRES_PROTOCOL
 	if host.Port == "" {
 		host.Port = DEFAULT_POSTGRES_PORT
 	}
