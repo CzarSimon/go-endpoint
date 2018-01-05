@@ -22,8 +22,8 @@ type ConnInfo struct {
 	ConnStr    string `json:"connStr"`
 }
 
-// DBConfig Interface for database configuration and connection
-type DBConfig interface {
+// SQLConfig Interface for database configuration and connection
+type SQLConfig interface {
 	Connect() (*sql.DB, error)
 	ConnInfo() ConnInfo
 }
