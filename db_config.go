@@ -25,8 +25,8 @@ const (
 
 // MySQL default values
 const (
-  	DEFAULT_MYSQL_PORT     = "3306"
-  	DEFAULT_MYSQL_PROTOCOL = "tcp"
+	DEFAULT_MYSQL_PORT     = "3306"
+	DEFAULT_MYSQL_PROTOCOL = "tcp"
 )
 
 // SQLite default values
@@ -93,14 +93,14 @@ func (pg PGConfig) Connect() (*sql.DB, error) {
 // SQLiteConfig Configuration info for a SQLite db
 type SQLiteConfig struct {
 	DriverVersion string `json:"driverVersion"`
-	File 	      string `json:"file"`
+	File          string `json:"file"`
 }
 
 // NewSQLiteConfig Creates a new SQLconfig by reading from environment variables
 func NewSQLiteConfig(name string) SQLiteConfig {
 	return SQLiteConfig{
-		Version: getenv(makeKey(name, DB_VERSION), DEFAULT_SQLITE_DRIVER),
-		File: 	 os.Getenv(makeKey(name, DB_NAME)),
+		DriverVersion: getenv(makeKey(name, DB_VERSION), DEFAULT_SQLITE_DRIVER),
+		File:          os.Getenv(makeKey(name, DB_NAME_KEY)),
 	}
 }
 
@@ -109,7 +109,7 @@ func (lite SQLiteConfig) Connect() (*sql.DB, error) {
 	return connectDB(lite.ConnInfo())
 }
 
-// ConnInfo Gets the connection information 
+// ConnInfo Gets the connection information
 func (lite SQLiteConfig) ConnInfo() ConnInfo {
 	return ConnInfo{
 		DriverName: lite.DriverVersion,
@@ -119,10 +119,10 @@ func (lite SQLiteConfig) ConnInfo() ConnInfo {
 
 // MySQLConfig Configuration info for a MySQL db
 type MySQLConfig struct {
-  ServerAddr
-  User     string `json:"username"`
-  Password string `json:"password"`
-  Database string `json:"database"`
+	ServerAddr
+	User     string `json:"username"`
+	Password string `json:"password"`
+	Database string `json:"database"`
 }
 
 // NewMySQLConfig Creates a new MySQLConfig from environment variables
@@ -152,7 +152,7 @@ func (my MySQLConfig) ConnInfo() ConnInfo {
 
 // getDSN Structures and returns a MySQL datasource name. Only TCP connection is supported
 func (my MySQLConfig) getDSN() string {
-	return fmt.Sprintf("%s:%s@%s(%s%s)/%s", 
+	return fmt.Sprintf("%s:%s@%s(%s%s)/%s",
 		my.User, my.Password, my.Protocol, my.Host, my.getPortString(), my.Database)
 }
 
