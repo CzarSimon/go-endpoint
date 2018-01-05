@@ -19,7 +19,7 @@ const (
 const (
 	DEFAULT_POSTGRES_PORT     = "5432"
 	DEFAULT_POSTGRES_SSL_MODE = "disable"
-	DEFAULT_POSTGRES_DATABASE = "postgres
+	DEFAULT_POSTGRES_DATABASE = "postgres"
 	POSTGRES_PROTOCOL         = "tcp"
 )
 
@@ -64,8 +64,8 @@ func NewPGConfig(name string) PGConfig {
 	}
 	return PGConfig{
 		ServerAddr: host,
-		User:       getenv(makeKey(name, DB_USER_KEY), ""),
-		Password:   getenv(makeKey(name, DB_PWD_KEY), ""),
+		User:       os.Getenv(makeKey(name, DB_USER_KEY)),
+		Password:   os.Getenv(makeKey(name, DB_PWD_KEY)),
 		Database:   getenv(makeKey(name, DB_NAME_KEY), DEFAULT_POSTGRES_DATABASE),
 		SSLMode:    getenv(makeKey(name, DB_SSL_MODE_KEY), DEFAULT_POSTGRES_SSL_MODE),
 	}
@@ -100,7 +100,7 @@ type SQLiteConfig struct {
 func NewSQLiteConfig(name string) SQLiteConfig {
 	return SQLiteConfig{
 		Version: getenv(makeKey(name, DB_VERSION), DEFAULT_SQLITE_DRIVER),
-		File: getenv(makeKey(name, DB_NAME), ""),
+		File: 	 os.Getenv(makeKey(name, DB_NAME)),
 	}
 }
 
