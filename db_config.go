@@ -127,14 +127,14 @@ type MySQLConfig struct {
 
 // NewMySQLConfig Creates a new MySQLConfig from environment variables
 func NewMySQLConfig(name string) MySQLConfig {
-  server := NewServerAddr(name)
-  server.Protocol = DEFAULT_MYSQL_PROTOCOL
-  return MySQLConfig{
-    ServerAddr: server
-    User:       os.Getenv(makeKey(name, DB_USER_KEY)),
+	server := NewServerAddr(name)
+	server.Protocol = DEFAULT_MYSQL_PROTOCOL
+	return MySQLConfig{
+		ServerAddr: server,
+		User:       os.Getenv(makeKey(name, DB_USER_KEY)),
 		Password:   os.Getenv(makeKey(name, DB_PWD_KEY)),
 		Database:   os.Getenv(makeKey(name, DB_NAME_KEY)),
-  }
+	}
 }
 
 // Connect Attempts to connect to a MySQL database. Requires a driver!
