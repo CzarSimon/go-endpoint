@@ -93,7 +93,7 @@ func (pg PGConfig) Connect() (*sql.DB, error) {
 // SQLiteConfig Configuration info for a SQLite db
 type SQLiteConfig struct {
 	DriverVersion string `json:"driverVersion"`
-	File string `json:"file"`
+	File 	      string `json:"file"`
 }
 
 // NewSQLiteConfig Creates a new SQLconfig by reading from environment variables
@@ -139,21 +139,21 @@ func NewMySQLConfig(name string) MySQLConfig {
 
 // Connect Attempts to connect to a MySQL database. Requires a driver!
 func (my MySQLConfig) Connect() (*sql.DB, error) {
-  return connectDB(my.ConnInfo())
+	return connectDB(my.ConnInfo())
 }
 
 // ConnInfo Gets the connection information
 func (my MySQLConfig) ConnInfo() ConnInfo {
-  return ConnInfo{
-    DriverName: "mysql",
-    ConnStr:    my.getDSN(),
-  }
+	return ConnInfo{
+		DriverName: "mysql",
+		ConnStr:    my.getDSN(),
+	}
 }
 
 // getDSN Structures and returns a MySQL datasource name. Only TCP connection is supported
 func (my MySQLConfig) getDSN() string {
-  return fmt.Sprintf("%s:%s@%s(%s%s)/%s",
-    my.User, my.Password, my.Protocol, my.Host, my.getPortString() my.Database)
+	return fmt.Sprintf("%s:%s@%s(%s%s)/%s", 
+		my.User, my.Password, my.Protocol, my.Host, my.getPortString(), my.Database)
 }
 
 // connectDB Generic connection and ping test method for a SQL db
