@@ -10,6 +10,7 @@ const (
 	DB_PWD_KEY      = "PASSWORD"
 	DB_NAME_KEY     = "NAME"
 	DB_SSL_MODE_KEY = "SSL_MODE"
+	DB_VERSION      = "VERSION"
 
 	DEFAULT_POSTGRES_PORT     = "5432"
 	DEFAULT_POSTGRES_SSL_MODE = "disable"
@@ -37,7 +38,7 @@ type PGConfig struct {
 	SSLMode  string `json:"sslMode"`
 }
 
-// NewPGConfig Creates a new PG config by reading from environment variables
+// NewPGConfig Creates a new PGConfig by reading from environment variables
 func NewPGConfig(name string) PGConfig {
 	host := NewServerAddr(name)
 	host.Protocol = POSTGRES_PROTOCOL
@@ -67,6 +68,33 @@ func (pg PGConfig) ConnInfo() ConnInfo {
 // Connect Attempts to connect to a postgres database. Requires a driver!
 func (pg PGConfig) Connect() (*sql.DB, error) {
 	return connectDB(pg.ConnInfo())
+}
+
+// SQLiteConfig Configuration info for a SQLite db
+type SQLiteConfig struct {
+	DriverVersion string `json:"driverVersion"`
+	File string `json:"file"`
+}
+
+// NewSQLiteConfig Creates a new SQLconfig by reading from environment variables
+func NewSQLiteConfig(name string) SQLiteConfig {
+	return SQLiteConfig{
+		Version: getenv(makeKey(name, DB_VERSION), "sqlite3"),
+		File: getenv(makeKey(name, DB_NAME), ""),
+	}
+}
+
+// Connect Connects to a sqlite database. Requires a driver!
+func (lite SQLiteConfig) Connect() (*sql.DB, error) {
+	return connectDB(lite.ConnInfo())
+}
+
+// ConnInfo Gets the connection information 
+func (lite SQLiteConfig) ConnInfo() ConnInfo {
+	return ConnInfo{
+		DriverName: lite.DriverVersion,
+		ConnStr:    lite.File,
+	}
 }
 
 // connectDB Generic connection and ping test method for a SQL db
