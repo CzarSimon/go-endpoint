@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// ServerAddr environment variable keysuffixes
 const (
 	PORT     = "PORT"
 	HOST     = "HOST"

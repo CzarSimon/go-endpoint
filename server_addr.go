@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// ServerAddr default values
 const (
 	DEFAULT_SERVER_PROTOCOL = "http"
 	DEFAULT_SERVER_HOST     = "localhost"

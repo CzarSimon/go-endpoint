@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-// Database environment variable keyssuffixes
+// Database environment variable keysuffixes
 const (
 	DB_USER_KEY     = "USER"
 	DB_PWD_KEY      = "PASSWORD"
