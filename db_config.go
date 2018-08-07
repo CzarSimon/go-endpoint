@@ -120,9 +120,10 @@ func (lite SQLiteConfig) ConnInfo() ConnInfo {
 // MySQLConfig Configuration info for a MySQL db
 type MySQLConfig struct {
 	ServerAddr
-	User     string `json:"username"`
-	Password string `json:"password"`
-	Database string `json:"database"`
+	User             string `json:"username"`
+	Password         string `json:"password"`
+	Database         string `json:"database"`
+	ConnectionParams string `json:"connectionParams"`
 }
 
 // NewMySQLConfig Creates a new MySQLConfig from environment variables
@@ -130,10 +131,11 @@ func NewMySQLConfig(name string) MySQLConfig {
 	server := NewServerAddr(name)
 	server.Protocol = DEFAULT_MYSQL_PROTOCOL
 	return MySQLConfig{
-		ServerAddr: server,
-		User:       os.Getenv(makeKey(name, DB_USER_KEY)),
-		Password:   os.Getenv(makeKey(name, DB_PWD_KEY)),
-		Database:   os.Getenv(makeKey(name, DB_NAME_KEY)),
+		ServerAddr:       server,
+		User:             os.Getenv(makeKey(name, DB_USER_KEY)),
+		Password:         os.Getenv(makeKey(name, DB_PWD_KEY)),
+		Database:         os.Getenv(makeKey(name, DB_NAME_KEY)),
+		ConnectionParams: os.Getenv(makeKey(name, "CONNECTION_PARAMS")),
 	}
 }
 
@@ -152,8 +154,12 @@ func (my MySQLConfig) ConnInfo() ConnInfo {
 
 // getDSN Structures and returns a MySQL datasource name. Only TCP connection is supported
 func (my MySQLConfig) getDSN() string {
-	return fmt.Sprintf("%s:%s@%s(%s%s)/%s",
+	dsn := fmt.Sprintf("%s:%s@%s(%s%s)/%s",
 		my.User, my.Password, my.Protocol, my.Host, my.getPortString(), my.Database)
+	if my.ConnectionParams != "" {
+		dsn = fmt.Sprintf("%s?%s", dsn, my.ConnectionParams)
+	}
+	return dsn
 }
 
 // connectDB Generic connection and ping test method for a SQL db
